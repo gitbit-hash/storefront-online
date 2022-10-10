@@ -10,7 +10,7 @@ const {
   ENV,
 } = process.env;
 
-let client: Pool | undefined;
+let client: Pool;
 
 if (ENV === 'test') {
   client = new Pool({
