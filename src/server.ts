@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import 'dotenv/config';
+import morgan from 'morgan';
 
 import dashboardRoutes from './handlers/dashboardRoutes';
 import productRoutes from './handlers/productRoutes';
@@ -19,6 +20,7 @@ app.use(
     optionsSuccessStatus: 200,
   })
 );
+app.use(morgan('dev'));
 
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/users', userRoutes);
