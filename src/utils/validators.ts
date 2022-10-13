@@ -35,7 +35,7 @@ export const validateBodyValues = (reqBody: Product | User) => {
 
     // Check price value
     if ('price' in reqBody) {
-      const productPrice = parseInt((reqBody as Product).price);
+      const productPrice = reqBody.price;
 
       if (isNaN(productPrice) || Array.isArray((reqBody as Product).price)) {
         return {

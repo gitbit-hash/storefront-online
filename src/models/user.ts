@@ -28,7 +28,7 @@ export class UserStore {
     }
   }
 
-  async show(username: string): Promise<User> {
+  async show(username: string): Promise<{ username: string } | undefined> {
     try {
       const conn = await client.connect();
 
@@ -39,7 +39,7 @@ export class UserStore {
 
       conn.release();
 
-      return result.rows[0];
+      return result.rows[0] || undefined;
     } catch (err) {
       throw new Error(`Couuld not user, ${err}`);
     }
@@ -76,30 +76,10 @@ export class UserStore {
     }
   }
 
-  async checkExistingUser(
-    username: string
-  ): Promise<{ username: string } | undefined> {
-    try {
-      const conn = await client.connect();
-
-      const existingUserQuery =
-        'SELECT username FROM users WHERE LOWER(username)=LOWER($1)';
-
-      const existingUserResult = await conn.query(existingUserQuery, [
-        username,
-      ]);
-
-      const existingUser = existingUserResult.rows[0];
-
-      conn.release();
-
-      return existingUser;
-    } catch (err) {
-      throw new Error(`Couuld not create user, ${err}`);
-    }
-  }
-
-  async authenticate(username: string, password: string): Promise<User | null> {
+  async authenticate(
+    username: string,
+    password: string
+  ): Promise<{ id: string; password: string } | null> {
     const conn = await client.connect();
 
     const sqlQuery =

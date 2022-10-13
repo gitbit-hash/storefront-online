@@ -29,7 +29,8 @@ const show = async (req: Request, res: Response) => {
   }
 
   try {
-    const product: Product = await store.show(product_id);
+    const productIdInteger = parseInt(product_id);
+    const product: Product = await store.show(productIdInteger);
 
     if (product) {
       return res.json(product);
@@ -42,7 +43,7 @@ const show = async (req: Request, res: Response) => {
 };
 
 const create = async (req: Request, res: Response) => {
-  const { name, price, category }: Product = req.body;
+  const { name, price, category } = req.body;
 
   const { isValidPropertyKey, error: propertyKeyError } = validateBodyKeys(
     req.body,

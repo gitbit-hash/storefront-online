@@ -33,7 +33,9 @@ const show = async (req: Request, res: Response) => {
   const trimUsername = username.trim();
 
   try {
-    const user: User = await store.show(trimUsername);
+    const user: { username: string } | undefined = await store.show(
+      trimUsername
+    );
 
     if (user) {
       return res.json(user);
@@ -48,7 +50,7 @@ const show = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
   const { firstName, lastName, username, password } = req.body;
 
-  const existingUser = await store.checkExistingUser(username);
+  const existingUser = await store.show(username);
 
   if (existingUser) {
     return res.status(400).json({ error: 'username already taken' });
@@ -102,7 +104,8 @@ const authenticate = async (req: Request, res: Response) => {
   }
 
   try {
-    const user: User | null = await store.authenticate(username, password);
+    const user: { id: string; password: string } | null =
+      await store.authenticate(username, password);
 
     if (user) {
       const token = jwt.sign(user, process.env.JWT_SECRET as string);

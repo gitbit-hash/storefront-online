@@ -3,8 +3,8 @@ import client from '../database';
 export type Product = {
   id?: number;
   name: string;
-  price: string;
-  category?: string;
+  price: number;
+  category?: string | null;
 };
 
 export class ProductStore {
@@ -24,7 +24,7 @@ export class ProductStore {
     }
   }
 
-  async show(id: string): Promise<Product> {
+  async show(id: number): Promise<Product> {
     try {
       const conn = await client.connect();
 
@@ -33,7 +33,6 @@ export class ProductStore {
       const result = await conn.query(sqlQuery, [id]);
 
       conn.release();
-
       return result.rows[0];
     } catch (err) {
       throw new Error(`Unable to get product, ${err}.`);
@@ -52,7 +51,6 @@ export class ProductStore {
       const result = await conn.query(sqlQuery, [name, price, category]);
 
       conn.release();
-
       return result.rows[0];
     } catch (err) {
       throw new Error(`Unable to create product, ${err}.`);

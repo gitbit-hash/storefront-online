@@ -6,13 +6,13 @@ export enum Status {
 }
 
 export type Order = {
-  id?: string;
-  userId: string;
+  id?: number;
+  user_id: string;
   status?: Status;
 };
 
 export class OrderStore {
-  async index(userId: string): Promise<Order[]> {
+  async index(userId: number): Promise<Order[]> {
     try {
       const conn = await client.connect();
 
@@ -28,7 +28,7 @@ export class OrderStore {
     }
   }
 
-  async getOrderById(orderId: string, userId: string): Promise<Order> {
+  async getOrderById(orderId: number, userId: number): Promise<Order> {
     try {
       const conn = await client.connect();
 
@@ -44,7 +44,7 @@ export class OrderStore {
     }
   }
 
-  async getCurrentOrder(userId: string): Promise<Order> {
+  async getCurrentOrder(userId: number): Promise<Order> {
     try {
       const conn = await client.connect();
 
@@ -61,7 +61,7 @@ export class OrderStore {
     }
   }
 
-  async getCompletedOrders(userId: string): Promise<Order[]> {
+  async getCompletedOrders(userId: number): Promise<Order[]> {
     try {
       const conn = await client.connect();
 
@@ -78,7 +78,7 @@ export class OrderStore {
     }
   }
 
-  async createNewOrder(userId: string): Promise<Order> {
+  async createNewOrder(userId: number): Promise<Order> {
     try {
       const conn = await client.connect();
 
@@ -88,14 +88,13 @@ export class OrderStore {
       const result = await conn.query(sqlQuery, [userId, Status.Active]);
 
       conn.release();
-
       return result.rows[0];
     } catch (err) {
       throw new Error(`Unable to create order, ${err}`);
     }
   }
 
-  async updateActiveOrder(userId: string): Promise<Order> {
+  async updateActiveOrder(userId: number): Promise<Order> {
     try {
       const conn = await client.connect();
 
@@ -112,7 +111,7 @@ export class OrderStore {
     }
   }
 
-  async addProduct(quantity: number, orderId: string, productId: string) {
+  async addProduct(quantity: number, orderId: number, productId: number) {
     try {
       const conn = await client.connect();
 
@@ -127,7 +126,9 @@ export class OrderStore {
 
       return order;
     } catch (err) {
-      throw new Error(`Unable to add ${productId} to order ${orderId}, ${err}`);
+      throw new Error(
+        `Unable to add product: ${productId} to order: ${orderId}, ${err}`
+      );
     }
   }
 }

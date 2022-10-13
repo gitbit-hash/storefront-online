@@ -12,7 +12,7 @@ const index = async (_: Request, res: Response) => {
   try {
     const { id: userId } = res.locals.verifiedUser;
 
-    const orders: Order[] = await orderStore.index(userId);
+    const orders: Order[] = await orderStore.index(parseInt(userId));
 
     if (orders.length > 0) {
       return res.json(orders);
@@ -25,16 +25,19 @@ const index = async (_: Request, res: Response) => {
 };
 
 const getOrderById = async (req: Request, res: Response) => {
-  const { order_id } = req.params;
+  const { order_id: orderId } = req.params;
 
   const { id: userId } = res.locals.verifiedUser;
 
-  if (!order_id || Number.isNaN(Number(order_id))) {
+  if (!orderId || Number.isNaN(Number(orderId))) {
     return res.status(400).json('Please provide a valid order id parameter.');
   }
 
+  const userIdInt = parseInt(userId);
+  const orderIdInt = parseInt(orderId);
+
   try {
-    const order: Order = await orderStore.getOrderById(order_id, userId);
+    const order: Order = await orderStore.getOrderById(orderIdInt, userIdInt);
 
     if (order) {
       return res.json(order);
@@ -47,7 +50,8 @@ const getOrderById = async (req: Request, res: Response) => {
 };
 
 const getCurrentOrder = async (_: Request, res: Response) => {
-  const { id: userId } = res.locals.verifiedUser;
+  const { id } = res.locals.verifiedUser;
+  const userId = parseInt(id);
 
   try {
     const order: Order = await orderStore.getCurrentOrder(userId);
@@ -63,7 +67,8 @@ const getCurrentOrder = async (_: Request, res: Response) => {
 };
 
 const getCompletedOrders = async (_: Request, res: Response) => {
-  const { id: userId } = res.locals.verifiedUser;
+  const { id } = res.locals.verifiedUser;
+  const userId = parseInt(id);
 
   try {
     const completedOrders: Order[] = await orderStore.getCompletedOrders(
@@ -81,7 +86,8 @@ const getCompletedOrders = async (_: Request, res: Response) => {
 };
 
 const createNewOrder = async (_: Request, res: Response) => {
-  const { id: userId } = res.locals.verifiedUser;
+  const { id } = res.locals.verifiedUser;
+  const userId = parseInt(id);
 
   try {
     const activeOrder = await orderStore.getCurrentOrder(userId);
@@ -104,7 +110,8 @@ const createNewOrder = async (_: Request, res: Response) => {
 };
 
 const updateActiveOrder = async (_: Request, res: Response) => {
-  const { id: userId } = res.locals.verifiedUser;
+  const { id } = res.locals.verifiedUser;
+  const userId = parseInt(id);
 
   try {
     const activeOrder = await orderStore.getCurrentOrder(userId);
@@ -158,15 +165,17 @@ const addProduct = async (req: Request, res: Response) => {
     }
 
     const activeOrderId = activeOrder.id;
+    const orderIdInt = parseInt(order_id);
 
-    if (activeOrderId != order_id) {
+    if (activeOrderId !== orderIdInt) {
       return res.status(404).json({
         error:
           'No active order, please provide an active order id, and make sure that you have an active order.',
       });
     }
+    const productIdInt = parseInt(productId);
 
-    const product: Product = await productStore.show(productId);
+    const product: Product = await productStore.show(productIdInt);
 
     if (!product) {
       return res.status(400).json({
@@ -184,8 +193,8 @@ const addProduct = async (req: Request, res: Response) => {
 
     const addedProduct = await orderStore.addProduct(
       quantity,
-      order_id,
-      productId
+      orderIdInt,
+      productIdInt
     );
 
     if (addedProduct) {
