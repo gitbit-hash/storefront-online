@@ -107,13 +107,13 @@ const authenticate = async (req: Request, res: Response) => {
     const user: { id: string; password: string } | null =
       await store.authenticate(username, password);
 
-    if (user) {
-      const token = jwt.sign(user, process.env.JWT_SECRET as string);
-
-      return res.json(token);
+    if (!user) {
+      return res.status(401).json('Invalid credentials.');
     }
 
-    return res.json(user);
+    const token = jwt.sign(user, process.env.JWT_SECRET as string);
+
+    return res.json(token);
   } catch (err) {
     return res.status(500).json({ error: 'Something went wrong!' });
   }

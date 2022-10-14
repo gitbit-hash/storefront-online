@@ -1,4 +1,4 @@
-import { Order, OrderStore, Status } from '../order';
+import { Order, OrderStore, Status } from '../../models/order';
 
 const store = new OrderStore();
 
