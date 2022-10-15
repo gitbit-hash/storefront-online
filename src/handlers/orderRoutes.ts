@@ -29,7 +29,7 @@ const getOrderById = async (req: Request, res: Response) => {
 
   const { id: userId } = res.locals.verifiedUser;
 
-  if (!orderId || Number.isNaN(Number(orderId))) {
+  if (Number.isNaN(Number(orderId))) {
     return res.status(400).json('Please provide a valid order id parameter.');
   }
 
@@ -183,7 +183,7 @@ const addProduct = async (req: Request, res: Response) => {
       });
     }
 
-    if (!quantity || Number.isNaN(Number(quantity)) || quantity < 1) {
+    if (Number.isNaN(Number(quantity)) || quantity < 1) {
       return res
         .status(400)
         .json(
