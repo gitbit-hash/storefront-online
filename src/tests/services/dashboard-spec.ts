@@ -1,7 +1,6 @@
 import { Product } from '../../models/product';
 import { DashboardQueries } from '../../services/dashboard';
 
-
 const store = new DashboardQueries();
 
 describe('User Model', () => {
@@ -13,8 +12,7 @@ describe('User Model', () => {
     it('it should return an array of top purchased products', async () => {
       const result: Product[] = await store.getTopFiveProducts();
 
-      expect(result.length).toBeGreaterThan(0)
+      expect(result.length).toBeGreaterThan(0);
     });
   });
-
 });
