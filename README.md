@@ -7,8 +7,7 @@ Table of contents
         * [Windows Installation](#windows-installation)
         * [Mac Installation](#mac-installation)
       * [Connect To a PostgreSQL Database Server](#connect-to-a-postgresql-database-server)
-        * [Windows Connection](#windows-connection)
-        * [Mac Connection](#mac-connection)
+        * [Connect to Database Server Using psql](#connect-to-database-server-using-psql)
    * [What ports the backend and database are running on](#what-ports-the-backend-and-database-are-running-on)
    * [Package installation instructions](#package-installation-instructions)
    
@@ -31,17 +30,23 @@ Visit this [Link](https://www.postgresqltutorial.com/postgresql-getting-started/
 Connect To a PostgreSQL Database Server
 --------------------------------------
 
-Windows Connection
-------------------
+Connect to Database Server Using psql
+-------------------------------------
 
-Visit this [Link](https://www.postgresqltutorial.com/postgresql-getting-started/connect-to-postgresql-database/) , and follow the steps to how to connect to PostgreSQL server on Windows.
+ After finishing installing PostgreSQL, you are ready to connect to database .
 
+ 1. Open PSQL terminal (SQL Shell(psql)) .
 
-Mac Connection
---------------
+ 2. Enter all the information such as Server, Database, Port, Username, and Password. If you press Enter, the program will use the default value specified in the square bracket [] and move the cursor to the new line. For example, localhost is the default database server. In the step for entering the password for user postgres, you need to enter the password the user postgres that you chose during the PostgreSQL installation .
 
-Visit this [Link](https://medium.com/@viviennediegoencarnacion/getting-started-with-postgresql-on-mac-e6a5f48ee399) , and follow the steps to how to connect to PostgreSQL server on Mac.
+ 3. For creating a databse, enter the following command ```CREATE DATABASE storefront_online_store;```
 
+ 4. For creating a testing databse, enter the following command ```CREATE DATABASE storefront_online_store_test;```
+ 
+ 5. If you want to create a new user, enter the following command ```CREATE USER username WITH PASSWORD 'yourpassword';```
+
+ 6. Grant all privileges to the new created user, enter the following command ```GRANT ALL PRIVILEGES ON DATABASE storefront_online_store TO username; ```
+    ```GRANT ALL PRIVILEGES ON DATABASE storefront_online_store_test TO username; ```
 
 What ports the backend and database are running on
 ==================================================
